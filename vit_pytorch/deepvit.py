@@ -16,7 +16,7 @@ class FeedForward(nn.Module):
             nn.Linear(hidden_dim, dim),
             nn.Dropout(dropout)
         )
-    def forward(self, x):
+    def forward(self, x, **kwargs):
         return self.net(x)
 
 class Attention(nn.Module):
@@ -44,7 +44,7 @@ class Attention(nn.Module):
             nn.Dropout(dropout)
         )
 
-    def forward(self, x):
+    def forward(self, x, **kwargs):
         b, n, _, h = *x.shape, self.heads
         x = self.norm(x)
 
@@ -78,7 +78,7 @@ class Transformer(nn.Module):
                 Attention(dim, heads = heads, dim_head = dim_head, dropout = dropout),
                 FeedForward(dim, mlp_dim, dropout = dropout)
             ]))
-    def forward(self, x):
+    def forward(self, x, **kwargs):
         for attn, ff in self.layers:
             x = attn(x) + x
             x = ff(x) + x
